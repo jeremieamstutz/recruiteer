@@ -3,9 +3,17 @@ const cheerio = require('cheerio');
 const { find } = require('domutils');
 const base_url = 'https://www.linkedin.com/jobs/view/'
 const regex=  /(JobId=)\d{10}/g;
-const user_url = 'https://www.linkedin.com/jobs/collections/recommended/?currentJobId=3334551559'
-let JobId = user_url.match(regex)[0].match(/\d{10}/g)[0];
-let final_url = (base_url+JobId)
+const user_url = 'https://www.linkedin.com/jobs/view/3370792247/?alternateChannel=search&refId=wg0KaNvco%2F02S2iF7aEzZQ%3D%3D&trackingId=Z%2FV4qhfPwiRH5NQlNLPgXA%3D%3D'
+
+let JobIdString = ''
+if (regex.test(user_url)){
+    JobIdString = user_url.match(regex).match(/\d{10}/g)[0];
+}
+else{
+    JobIdString = user_url.match(/\d{10}/g)[0];
+
+}
+let final_url =(base_url+JobIdString)
 
 axios(final_url)
 .then (response => {
