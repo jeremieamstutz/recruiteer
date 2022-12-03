@@ -3,8 +3,7 @@ const cheerio = require('cheerio');
 const { find } = require('domutils');
 const base_url = 'https://www.linkedin.com/jobs/view/'
 const regex=  /(JobId=)\d{10}/g;
-const user_url = 'https://www.linkedin.com/jobs/view/3370792247/?alternateChannel=search&refId=wg0KaNvco%2F02S2iF7aEzZQ%3D%3D&trackingId=Z%2FV4qhfPwiRH5NQlNLPgXA%3D%3D'
-
+const user_url = 'https://ch.linkedin.com/jobs/view/senior-business-development-leader%E2%80%93-bms-europe-at-honeywell-3283781893?refId=BZaNgXaxA8Z6C5WTjHsyVw%3D%3D&trackingId=03MeAm6gi6h7IFw%2F8QIjTQ%3D%3D&position=1&pageNum=0&trk=public_jobs_jserp-result_search-card'
 let JobIdString = ''
 if (regex.test(user_url)){
     JobIdString = user_url.match(regex).match(/\d{10}/g)[0];
@@ -20,11 +19,11 @@ axios(final_url)
 const html = response.data;
 const $ = cheerio.load(html);
 const job_title=$('h1').text().trim()
-// const company = $('span').text().trim()
+const company = $('span.topcard__flavor').text().trim()
 const job_details = $("div.show-more-less-html__markup.show-more-less-html__markup--clamp-after-5")
 let description = ''
 job_details.children().each((index, element) => {
     description += ($(element).text().trim() + '\n')
 });
-console.log(description)
+console.log(company)
 })
