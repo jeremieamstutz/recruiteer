@@ -2,8 +2,9 @@ const axios = require('axios');
 const cheerio = require('cheerio');
 const { find } = require('domutils');
 const base_url = 'https://www.linkedin.com/jobs/view/'
-let user_url = 'https://www.linkedin.com/jobs/collections/recommended/?currentJobId=3334551559'
-let JobId = user_url.split("currentJobId=")[1];
+const regex=  /\d{10}/g;
+const user_url = 'https://www.linkedin.com/jobs/collections/recommended/?currentJobId=3334551559'
+let JobId = user_url.match(regex);
 let final_url = ''
 if (typeof JobId === 'string' && JobId.length === 0) {
     final_url = user_url
@@ -22,4 +23,5 @@ let description = ''
 job_details.children().each((index, element) => {
     description += ($(element).text().trim() + '\n')
 });
+console.log(description)
 })
