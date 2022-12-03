@@ -3,7 +3,7 @@ import Head from 'next/head'
 
 export default function Home() {
 	return (
-		<Layout>
+		<>
 			<Head>
 				<title>Recruiteer</title>
 				<meta
@@ -12,6 +12,9 @@ export default function Home() {
 				/>
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
-		</Layout>
+			<Layout>
+				<h1 style={{ textAlign: 'center' }}>Recruiteer.</h1>
+			</Layout>
+		</>
 	)
 }

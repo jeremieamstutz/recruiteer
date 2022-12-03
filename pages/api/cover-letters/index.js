@@ -13,12 +13,63 @@ export default async function handler(req, res) {
 
 	switch (method) {
 		case 'POST': {
-			const { prompt } = body
+			const {
+				name,
+				title,
+				hard_skills,
+				soft_skills,
+				goals,
+				experiences,
+				educations,
+				projects,
+				company,
+				job,
+				description,
+			} = body
+
+			// const query = `
+			// Name: "${name}"
+			// Title: "${title}"
+			// Hard skills: "${hard_skills}"
+			// Soft skills: "${soft_skills}"
+			// Educations: "${educations}"
+			// Past experiences: "${experiences}"
+			// Personal projects: "${projects}"
+			// Company to apply for: "${company}"
+			// Job title: "${job}"
+			// Job description: "${description}"
+			// Write a cover letter in English with a professional tone.`
+			// const query = `
+			// Nom complet: "${name}"
+			// Profession: "${title}"
+			// Compétences: "${hard_skills}"
+			// Savoir être: "${soft_skills}"
+			// Formations: "${educations}"
+			// Expériences: "${experiences}"
+			// Projets: "${projects}"
+			// Entreprise: "${company}"
+			// Titre du poste: "${job}"
+			// Description du poste: "${description}"
+			// Ecris une lettre de motivation professionnelle.`
+			const query = `
+			Nom complet: "${name}"
+			Compétences: "${hard_skills}"
+			Savoir être: "${soft_skills}"
+			Formations: "${educations}"
+			Expériences: "${experiences}"
+			Entreprise: "${company}"
+			Titre du poste: "${job}"
+			Ecris une lettre de motivation.`
+			// const query = `My name is ${name} and I'm apply for a job at ${company} as a ${job} with a description of ${description}. Write a cover letter.`
+
+			console.log(query)
 
 			const response = await openai.createCompletion({
 				model: 'text-davinci-003',
-				prompt: prompt,
-				temperature: 0,
+				prompt: query,
+				presence_penalty: 1,
+				frequency_penalty: 1,
+				temperature: 0.7,
 				max_tokens: 1000,
 			})
 

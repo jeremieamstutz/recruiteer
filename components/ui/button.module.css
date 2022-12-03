@@ -1,0 +1,33 @@
+.button {
+	user-select: none;
+	border: none;
+	outline: none;
+	height: 3rem;
+	min-width: 6rem;
+	padding: 0.5rem 1.5rem;
+	font-size: 1rem;
+	border-radius: 0.5rem;
+	cursor: pointer;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: all 100ms;
+}
+
+.primary {
+	color: #fff;
+	background: #000;
+}
+
+.primary:hover {
+	background: #333;
+}
+
+.secondary {
+	color: #000;
+	background: #eee;
+}
+
+.secondary:hover {
+	background: #ddd;
+}

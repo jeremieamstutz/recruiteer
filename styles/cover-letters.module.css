@@ -1,0 +1,12 @@
+.text {
+	white-space: pre-wrap;
+}
+
+.clamp {
+	-webkit-line-clamp: 10;
+	-webkit-box-orient: vertical;
+	display: -webkit-box;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	overflow-wrap: break-word;
+}

@@ -1,0 +1,33 @@
+.container {
+	display: flex;
+	flex: 1;
+	gap: 2rem;
+	align-items: stretch;
+}
+
+.input {
+	flex: 3;
+	border: 1px solid #eee;
+	border-radius: 0.75rem;
+	display: flex;
+	flex-direction: column;
+	height: 700px;
+}
+
+.body {
+	/* TODO: FIX OVERFLOW */
+	flex-grow: 0;
+	overflow: scroll;
+	flex: 1;
+	min-height: 0;
+	padding: 1.5rem;
+}
+
+.output {
+	flex: 3;
+	white-space: pre-wrap;
+	outline: none;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
