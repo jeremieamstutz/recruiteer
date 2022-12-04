@@ -1,6 +1,6 @@
 import classes from './input.module.css'
 
-export default function Input({ label, type, ...props }) {
+export default function Input({ label, type, maxLength, ...props }) {
 	switch (type) {
 		case 'textarea': {
 			return (
@@ -9,6 +9,11 @@ export default function Input({ label, type, ...props }) {
 					<div className={classes['input-group']}>
 						<textarea className={classes.input} {...props} />
 					</div>
+					{maxLength && (
+						<div className={classes.length}>
+							{props.value?.length} / {maxLength}
+						</div>
+					)}
 				</div>
 			)
 		}
@@ -23,6 +28,11 @@ export default function Input({ label, type, ...props }) {
 							{...props}
 						/>
 					</div>
+					{maxLength && (
+						<div className={classes.length}>
+							{props.value?.length} / {maxLength}
+						</div>
+					)}
 				</div>
 			)
 		}

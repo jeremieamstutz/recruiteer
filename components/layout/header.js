@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from 'next/link'
 
 import classes from './header.module.css'
@@ -7,8 +8,17 @@ export default function Header() {
 	return (
 		<header className={`container ${classes.header}`}>
 			<Logo />
-			<nav>
-				<Link href="/cover-letters">Mes lettres de motivations</Link>
+			<nav style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+				<Link href="/cover-letters">Mes lettres</Link>
+				<Link href="/profile">Profil</Link>
+				<Link href="/profile">
+					<Image
+						src="/images/IMG_8116.jpg"
+						width={48}
+						height={48}
+						style={{ borderRadius: '50%' }}
+					/>
+				</Link>
 			</nav>
 		</header>
 	)

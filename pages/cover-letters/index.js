@@ -7,70 +7,8 @@ import cn from 'clsx'
 
 import classes from 'styles/cover-letters.module.css'
 
-// function CoverLetter({ letter }) {
-// 	const [clamped, setClamped] = useState(true)
-
-// 	return (
-// 		<div
-// 			style={{
-// 				padding: '1rem 0',
-// 				borderRadius: '1rem',
-// 				padding: '1rem',
-// 				border: '1px solid #eee',
-// 				display: 'flex',
-// 				flexDirection: 'column',
-// 				gap: '1rem',
-// 				height: 'fit-content',
-// 			}}
-// 		>
-// 			<div
-// 				style={{
-// 					display: 'flex',
-// 					gap: '1rem',
-// 					alignItems: 'center',
-// 				}}
-// 			>
-// 				<div
-// 					style={{
-// 						width: 48,
-// 						height: 48,
-// 						background: '#999',
-// 						borderRadius: '0.5rem',
-// 					}}
-// 				/>
-// 				<div
-// 					style={{
-// 						flex: 1,
-// 					}}
-// 				>
-// 					<div>{letter.company}</div>
-// 					<h3 style={{ margin: 0 }}>{letter.job}</h3>
-// 				</div>
-// 				<div>
-// 					<Button>Modifier</Button>
-// 				</div>
-// 			</div>
-// 			<div className={cn(classes.text, { [classes.clamp]: clamped })}>
-// 				{letter.text}
-// 			</div>
-// 			<Button
-// 				onClick={() => setClamped(!clamped)}
-// 				style={{
-// 					cursor: 'pointer',
-// 					borderTop: '1px solid #eee',
-// 					borderRadius: 0,
-// 					background: 'transparent',
-// 					marginBottom: '-0.5rem',
-// 				}}
-// 			>
-// 				{clamped ? 'Agrandir' : 'Réduire'}
-// 			</Button>
-// 		</div>
-// 	)
-// }
-
 function CoverLetter({ letter }) {
-	const [clamped, setClamped] = useState(true)
+	const [editing, setEditing] = useState(false)
 
 	return (
 		<div
@@ -109,10 +47,32 @@ function CoverLetter({ letter }) {
 					<h3 style={{ margin: 0 }}>{letter.job}</h3>
 				</div>
 				<div>
-					<Button>Modifier</Button>
+					<Button onClick={() => setEditing(!editing)}>
+						{editing ? 'Enregister' : 'Modifier'}
+					</Button>
 				</div>
 			</div>
-			<div className={classes.text}>{letter.text}</div>
+			<div
+				className={classes.text}
+				style={{ outline: 'none' }}
+				contentEditable={editing}
+			>
+				{letter.text}
+			</div>
+
+			{letter.notes && (
+				<>
+					<div
+						style={{
+							with: '100%',
+							height: '1px',
+							background: '#eee',
+						}}
+					/>
+					<div>Notes</div>
+					<div contentEditable={editing}>{letter.notes}</div>
+				</>
+			)}
 		</div>
 	)
 }
@@ -121,15 +81,10 @@ function CoverLetterCard({ letter, onClick, selected }) {
 	return (
 		<div
 			style={{
-				padding: '1rem 0',
 				borderRadius: '1rem',
 				padding: '1rem',
 				border: '1px solid #eee',
 				background: selected ? '#f3f3f3' : '',
-				display: 'flex',
-				flexDirection: 'column',
-				gap: '1rem',
-				height: 'fit-content',
 				cursor: 'pointer',
 			}}
 			onClick={onClick}
@@ -152,6 +107,9 @@ function CoverLetterCard({ letter, onClick, selected }) {
 				<div
 					style={{
 						flex: 1,
+						display: 'flex',
+						flexDirection: 'column',
+						gap: '0.25rem',
 					}}
 				>
 					<div>{letter.company}</div>
@@ -165,7 +123,7 @@ function CoverLetterCard({ letter, onClick, selected }) {
 							letter.status === 'pending' ? 'orange' : 'green',
 						borderRadius: '50%',
 					}}
-				></div>
+				/>
 			</div>
 		</div>
 	)
@@ -220,10 +178,6 @@ export default function CoverLettersPage() {
 							</svg>
 						</Button>
 					</div>
-					{/* <h1 style={{ margin: 0 }}>Mes lettres</h1>
-					<Button href="/cover-letters/new" variant="primary">
-						Nouvelle lettre
-					</Button> */}
 					{LETTERS.map((letter, index) => (
 						<CoverLetterCard
 							key={index}

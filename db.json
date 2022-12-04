@@ -1,0 +1,17 @@
+{
+	"letters": [
+		{
+			"company": "Sunrise",
+			"job": "Data Analyst",
+			"status": "pending",
+			"text": "Madame, Monsieur,\n\nActuellement en recherche d'emploi, je me permets de candidater à votre offre pour le poste de [nom du poste à pourvoir]. Très intéressé[e] par le secteur de [secteur d'activité de l'entreprise], je suis particulièrement motivé[e] pour rejoindre votre entreprise\n\nGrâce à mes expériences en tant que [nom du métier] et à ma formation [nom de votre formation], je pense avoir pu acquérir les compétences nécessaires pour mener à bien les différentes missions. [Si vous avez eu l'occasion de d'effectuer certaines des missions détaillées dans la fiche de poste, c'est le moment d'en parler]. Mon parcours m'a donc permis de développer mes qualités relationnelles et mes compétences en matière de [citer une compétence acquise] et de [citer une deuxième compétence acquise].\n\nIntégrer une entreprise telle que la vôtre représente pour moi un réel enjeu professionnel, c'est pourquoi je suis particulièrement motivé[e] par votre offre. Je suis par ailleurs dynamique et doté[e] d'une grande capacité d'adaptation.\n\nJe serai heureux[se] de pouvoir échanger avec vous de vive voix dans le cadre d'un entretien. En attendant, je reste à votre disposition pour toute information complémentaire et vous prie d'agréer, Madame, Monsieur, l'expression de mes salutations distinguées.",
+			"notes": "J'aime les pommes"
+		},
+		{
+			"company": "Swisscom",
+			"job": "Ingénieur",
+			"status": "accepted",
+			"text": "Monsieur,\n\nVotre entreprise est bien connue dans la région pour ses prestations au service des énergies et des télécommunications. C’est au cours de mes études en génie électrique, aujourd’hui interrompues, que j’ai eu l’occasion de découvrir votre entreprise et ses réalisations.\n\nTélécommunications, lignes THT et transport d’énergie… Je suis intéressé par les différents aspects du métier et suis tout à fait conscient qu’il se pratique dehors, par tous les temps. Le travail de nuit et en hauteur ne me fait pas peur. Un tel métier qui touche à l’hydraulique, au pneumatique et à la mécanique, parmi d’autres domaines de la physique, me passionne.\n\nJ’ai pourtant initialement choisi de me lancer dans des études, pensant que je serais à ma place dans une haute école. Cependant, j’ai très vite réalisé que le côté surtout théorique de la formation polytechnique ne me convient pas. Après mon apprentissage, j’envisage de poursuivre mes études dans une haute école spécialisée. Je sais qu’après ma maturité gymnasiale, un stage d’un an est suffisant, mais je souhaite obtenir le CFC pour pouvoir trouver peut-être un poste et suivre la formation en emploi.\n\nPrécis, habile de mes mains et résistant, je serais très heureux de pouvoir m'entretenir avec vous de ma motivation et de faire un stage dans votre entreprise.\n\nTout en vous remerciant de l’attention que vous accorderez à mon dossier, je vous prie, Monsieur, de recevoir mes meilleures salutations."
+		}
+	]
+}
