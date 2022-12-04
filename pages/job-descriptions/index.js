@@ -150,7 +150,7 @@ export default function JobDescriptionPage() {
 							padding: '0.5rem 0',
 						}}
 					>
-						<h1 style={{ margin: 0 }}>Mes lettres</h1>
+						<h1 style={{ margin: 0 }}>Nos Offres d'emplois</h1>
 						<Button
 							href="/job-descriptions/new"
 							variant="primary"

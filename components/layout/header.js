@@ -9,6 +9,9 @@ export default function Header() {
 		<header className={`container ${classes.header}`}>
 			<Logo />
 			<nav style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
+				
+				<Link href="/job-descriptions">Nos Offers d'emploi</Link>
+
 				<Link href="/applications">Mes postulations</Link>
 				<Link href="/profile">Profil</Link>
 				<Link href="/profile">
