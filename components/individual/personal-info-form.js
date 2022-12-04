@@ -39,7 +39,7 @@ export default function PersonalInfoForm() {
 				options={hard_skills}
 				isMulti={true}
 				name="hard_skills"
-				defaultValue={hard_skills.find((option) =>
+				defaultValue={hard_skills.filter((option) =>
 					values.hard_skills.includes(option.value),
 				)}
 				onChange={(options) =>
@@ -55,7 +55,7 @@ export default function PersonalInfoForm() {
 				options={soft_skills}
 				isMulti={true}
 				name="soft_skills"
-				defaultValue={soft_skills.find((option) =>
+				defaultValue={soft_skills.filter((option) =>
 					values.soft_skills.includes(option.value),
 				)}
 				onChange={(options) =>

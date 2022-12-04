@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize'
-import sequelize from 'db'
+import sequelize from '../index'
 
-const Letter = sequelize.define('letter', {
+const Application = sequelize.define('application', {
 	id: {
 		primaryKey: true,
 		type: DataTypes.UUID,
@@ -16,14 +16,19 @@ const Letter = sequelize.define('letter', {
 		type: DataTypes.STRING,
 		allowNull: false,
 	},
-	text: {
-		type: DataTypes.STRING,
+	description: {
+		type: DataTypes.TEXT,
+		allowNull: false,
+	},
+	letter: {
+		type: DataTypes.TEXT,
 		allowNull: false,
 	},
 	status: {
 		type: DataTypes.STRING,
 		allowNull: false,
+		defaultValue: 'pending',
 	},
 })
 
-export default Letter
+export default Application

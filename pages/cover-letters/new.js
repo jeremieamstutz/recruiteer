@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { use, useState } from 'react'
 import axios from 'axios'
 import { Formik, Form } from 'formik'
 
@@ -9,28 +9,15 @@ import Button from 'components/ui/button'
 import classes from 'styles/new-cover-letter.module.css'
 import PersonalInfoForm from 'components/individual/personal-info-form'
 import JobInfoForm from 'components/individual/job-info-form'
+import { useRouter } from 'next/router'
+import { User } from 'db/models'
 
-const INITIAL_VALUES = {
-	name: 'Jérémie Amstutz',
-	title: 'Ingénieur',
-	hard_skills: ['Prototypage'],
-	soft_skills: ['Autonomie'],
-	goals: 'Conquérir le monde',
-	experiences: '',
-	educations:
-		'ETHZ, MSc in Management, Technology and Economics, 2023\nEPFL, BSc in Civil Engineering, 2020',
-	projects: '',
-	company: '',
-	job: '',
-	description: '',
-	linkedin: '',
-}
-
-export default function NewCoverLetterPage() {
+export default function NewCoverLetterPage({ user }) {
 	const [loading, setLoading] = useState(false)
 	const [text, setText] = useState('')
 	const [activeStep, setActiveStep] = useState(0)
 
+	const router = useRouter()
 	return (
 		<Layout>
 			<div className={classes.container}>
@@ -84,7 +71,20 @@ export default function NewCoverLetterPage() {
 						</div>
 						<div className={classes.body}>
 							<Formik
-								initialValues={INITIAL_VALUES}
+								initialValues={{
+									name: user?.name ?? '',
+									title: user?.title ?? '',
+									hard_skills: user?.hard_skills ?? [],
+									soft_skills: user?.soft_skills ?? [],
+									goals: user?.goals ?? [],
+									experiences: user?.experiences ?? '',
+									educations: user?.educations ?? '',
+									projects: user?.projects ?? '',
+									company: user?.company ?? '',
+									job: user?.job ?? '',
+									description: user?.description ?? '',
+									linkedin: '',
+								}}
 								onSubmit={async (values) => {
 									setLoading(true)
 									const res = await axios({
@@ -94,25 +94,36 @@ export default function NewCoverLetterPage() {
 									})
 									setText(res.data.choices[0].text)
 									setLoading(false)
+									await axios({
+										method: 'POST',
+										url: '/api/applications',
+										data: {
+											...values,
+											letter: res.data.choices[0].text,
+										},
+									})
+									router.push('/applications')
 								}}
 							>
-								<Form
-									id="cover-letter"
-									style={{
-										display: 'flex',
-										flexDirection: 'column',
-										gap: '0.75rem',
-									}}
-								>
-									<Stepper activeStep={activeStep}>
-										<Step>
-											<PersonalInfoForm />
-										</Step>
-										<Step>
-											<JobInfoForm />
-										</Step>
-									</Stepper>
-								</Form>
+								{({ values }) => (
+									<Form
+										id="cover-letter"
+										style={{
+											display: 'flex',
+											flexDirection: 'column',
+											gap: '0.75rem',
+										}}
+									>
+										<Stepper activeStep={activeStep}>
+											<Step>
+												<PersonalInfoForm />
+											</Step>
+											<Step>
+												<JobInfoForm />
+											</Step>
+										</Stepper>
+									</Form>
+								)}
 							</Formik>
 						</div>
 						<div
@@ -204,187 +215,11 @@ export default function NewCoverLetterPage() {
 	)
 }
 
-// import { useState } from 'react'
-// import axios from 'axios'
-// import { Formik, Form } from 'formik'
-
-// import Layout from 'components/layout/layout'
-// import { Step, Stepper } from 'components/form'
-// import Button from 'components/ui/button'
-
-// import classes from 'styles/new-cover-letter.module.css'
-// import PersonalInfoForm from 'components/individual/personal-info-form'
-// import JobInfoForm from 'components/individual/job-info-form'
-
-// const INITIAL_VALUES = {
-// 	name: 'Jérémie Amstutz',
-// 	title: 'Ingénieur',
-// 	hard_skills: ['Prototypage'],
-// 	soft_skills: ['Autonomie'],
-// 	goals: 'Conquérir le monde',
-// 	experiences: '',
-// 	educations:
-// 		'ETHZ, MSc in Management, Technology and Economics, 2023\nEPFL, BSc in Civil Engineering, 2020',
-// 	projects: '',
-// 	company: '',
-// 	job: '',
-// 	description: '',
-// 	linkedin: '',
-// }
-
-// function Collapsible({ label, collapsed, onClick, children }) {
-// 	return (
-// 		<div
-// 			style={{
-// 				border: '1px solid #eee',
-// 				padding: '1rem',
-// 				borderRadius: '1rem',
-// 				cursor: 'pointer',
-// 			}}
-// 			onClick={onClick}
-// 		>
-// 			<h2>{label}</h2>
-// 			{!collapsed && children}
-// 		</div>
-// 	)
-// }
-
-// export default function NewCoverLetterPage() {
-// 	const [loading, setLoading] = useState(false)
-// 	const [text, setText] = useState('')
-// 	const [activeStep, setActiveStep] = useState(0)
-// 	const [collapsed, setCollapsed] = useState(0)
-
-// 	return (
-// 		<Layout>
-// 			<div className={classes.container}>
-// 				<div className={classes.left}>
-// 					<h1 style={{ margin: '0 0 1rem' }}>Nouvelle lettre</h1>
-// 					<div className={classes.input}>
-// 						<div>
-// 							<Formik
-// 								initialValues={INITIAL_VALUES}
-// 								onSubmit={async (values) => {
-// 									setLoading(true)
-// 									const res = await axios({
-// 										method: 'POST',
-// 										url: '/api/cover-letters',
-// 										data: values,
-// 									})
-// 									setText(res.data.choices[0].text)
-// 									setLoading(false)
-// 								}}
-// 							>
-// 								<Form
-// 									id="cover-letter"
-// 									style={{
-// 										display: 'flex',
-// 										flexDirection: 'column',
-// 										gap: '0.75rem',
-// 									}}
-// 								>
-// 									<Collapsible
-// 										label="Informations personnelles"
-// 										collapsed={collapsed == 0}
-// 										onClick={() => setCollapsed(1)}
-// 									>
-// 										<PersonalInfoForm />
-// 									</Collapsible>
-// 									<Collapsible
-// 										label="Informations sur le poste"
-// 										collapsed={collapsed == 1}
-// 										onClick={() => setCollapsed(0)}
-// 									>
-// 										<JobInfoForm />
-// 									</Collapsible>
-// 								</Form>
-// 							</Formik>
-// 						</div>
-// 						<div
-// 							style={{
-// 								display: 'flex',
-// 								justifyContent: 'space-between',
-// 								padding: '1rem 1.5rem',
-// 								borderTop: '1px solid #eee',
-// 							}}
-// 						>
-// 							{activeStep === 0 ? (
-// 								<Button
-// 									type="button"
-// 									variant="primary"
-// 									onClick={() =>
-// 										setActiveStep(activeStep + 1)
-// 									}
-// 									style={{ marginLeft: 'auto' }}
-// 								>
-// 									Suivant
-// 								</Button>
-// 							) : (
-// 								<>
-// 									<Button
-// 										type="button"
-// 										onClick={() =>
-// 											setActiveStep(activeStep - 1)
-// 										}
-// 									>
-// 										Précédent
-// 									</Button>
-// 									<Button
-// 										type="submit"
-// 										variant="primary"
-// 										disabled={loading}
-// 										form="cover-letter"
-// 									>
-// 										{loading ? 'Chargement...' : 'Générer'}
-// 									</Button>
-// 								</>
-// 							)}
-// 						</div>
-// 					</div>
-// 				</div>
-// 				<div className={classes.output}>
-// 					{text ? (
-// 						<div
-// 							style={{ outline: 'none' }}
-// 							contentEditable={true}
-// 							suppressContentEditableWarning={true}
-// 							onInput={(event) =>
-// 								console.log(event.target.textContent)
-// 							}
-// 							spellCheck={false}
-// 						>
-// 							{text.trim()}
-// 						</div>
-// 					) : (
-// 						<div
-// 							style={{
-// 								flex: 1,
-// 								display: 'flex',
-// 								flexDirection: 'column',
-// 								justifyContent: 'center',
-// 								alignItems: 'center',
-// 							}}
-// 						>
-// 							<svg
-// 								xmlns="http://www.w3.org/2000/svg"
-// 								fill="none"
-// 								viewBox="0 0 24 24"
-// 								strokeWidth={1.5}
-// 								stroke="currentColor"
-// 								width={24}
-// 								height={24}
-// 							>
-// 								<path
-// 									strokeLinecap="round"
-// 									strokeLinejoin="round"
-// 									d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9zm3.75 11.625a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"
-// 								/>
-// 							</svg>
-// 							<div>Veuillez remplir le formulaire</div>
-// 						</div>
-// 					)}
-// 				</div>
-// 			</div>
-// 		</Layout>
-// 	)
-// }
+export async function getServerSideProps() {
+	const user = await User.findOne()
+	return {
+		props: {
+			user: JSON.parse(JSON.stringify(user)),
+		},
+	}
+}

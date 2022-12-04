@@ -1,12 +1,14 @@
-import fs from 'fs'
+import pg from 'pg'
+import { Sequelize } from 'sequelize'
 
-const data = fs.readFileSync('db/db.json')
-const db = JSON.parse(data)
+let sequelize
 
-export function findAll() {
-	return db.letters
+if (!sequelize) {
+	sequelize = new Sequelize(
+		'postgres://jamstutz:Jeremie1@localhost:5432/recruiteer',
+		{ logging: false },
+	)
+	sequelize.sync()
 }
 
-export default {
-	findAll,
-}
+export default sequelize

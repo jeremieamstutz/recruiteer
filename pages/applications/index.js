@@ -1,13 +1,17 @@
 import Layout from 'components/layout/layout'
 import Button from 'components/ui/button'
 import Link from 'next/link'
-import LETTERS from 'data/letters'
 import { useState } from 'react'
 import cn from 'clsx'
+import useSWR, { mutate } from 'swr'
 
 import classes from 'styles/cover-letters.module.css'
+import { Application } from 'db/models'
+import axios from 'axios'
 
-function CoverLetter({ letter }) {
+const fetcher = (url) => fetch(url).then((r) => r.json())
+
+function ApplicationDetails({ application, onChange }) {
 	const [editing, setEditing] = useState(false)
 
 	return (
@@ -43,10 +47,22 @@ function CoverLetter({ letter }) {
 						flex: 1,
 					}}
 				>
-					<div>{letter.company}</div>
-					<h3 style={{ margin: 0 }}>{letter.job}</h3>
+					<div>{application.company}</div>
+					<h3 style={{ margin: 0 }}>{application.job}</h3>
 				</div>
-				<div>
+				<div style={{ display: 'flex', gap: '1rem' }}>
+					<Button
+						onClick={async () => {
+							await axios({
+								method: 'DELETE',
+								url: '/api/applications/' + application.id,
+							})
+							await mutate('/api/applications')
+							onChange()
+						}}
+					>
+						Supprimer
+					</Button>
 					<Button onClick={() => setEditing(!editing)}>
 						{editing ? 'Enregister' : 'Modifier'}
 					</Button>
@@ -57,10 +73,10 @@ function CoverLetter({ letter }) {
 				style={{ outline: 'none' }}
 				contentEditable={editing}
 			>
-				{letter.text}
+				{application.letter}
 			</div>
 
-			{letter.notes && (
+			{application.notes && (
 				<>
 					<div
 						style={{
@@ -70,14 +86,14 @@ function CoverLetter({ letter }) {
 						}}
 					/>
 					<div>Notes</div>
-					<div contentEditable={editing}>{letter.notes}</div>
+					<div contentEditable={editing}>{application.notes}</div>
 				</>
 			)}
 		</div>
 	)
 }
 
-function CoverLetterCard({ letter, onClick, selected }) {
+function ApplicationCard({ application, onClick, selected }) {
 	return (
 		<div
 			style={{
@@ -112,15 +128,17 @@ function CoverLetterCard({ letter, onClick, selected }) {
 						gap: '0.25rem',
 					}}
 				>
-					<div>{letter.company}</div>
-					<h3 style={{ margin: 0 }}>{letter.job}</h3>
+					<div>{application.company}</div>
+					<h3 style={{ margin: 0 }}>{application.job}</h3>
 				</div>
 				<div
 					style={{
 						width: 8,
 						height: 8,
 						background:
-							letter.status === 'pending' ? 'orange' : 'green',
+							application.status === 'pending'
+								? 'orange'
+								: 'green',
 						borderRadius: '50%',
 					}}
 				/>
@@ -129,8 +147,13 @@ function CoverLetterCard({ letter, onClick, selected }) {
 	)
 }
 
-export default function CoverLettersPage() {
-	const [selectedLetter, setSelectedLetter] = useState(0)
+export default function ApplicationsPage({
+	applications: initialApplications,
+}) {
+	const [selectedApplication, setSelectedApplication] = useState(0)
+	const { data: applications } = useSWR('/api/applications', fetcher, {
+		fallbackData: initialApplications,
+	})
 	return (
 		<Layout>
 			<div style={{ display: 'flex', gap: '1rem' }}>
@@ -150,7 +173,7 @@ export default function CoverLettersPage() {
 							padding: '0.5rem 0',
 						}}
 					>
-						<h1 style={{ margin: 0 }}>Mes lettres</h1>
+						<h1 style={{ margin: 0 }}>Mes postulations</h1>
 						<Button
 							href="/cover-letters/new"
 							variant="primary"
@@ -178,19 +201,38 @@ export default function CoverLettersPage() {
 							</svg>
 						</Button>
 					</div>
-					{LETTERS.map((letter, index) => (
-						<CoverLetterCard
+					{applications.map((application, index) => (
+						<ApplicationCard
 							key={index}
-							letter={letter}
-							selected={selectedLetter === index}
-							onClick={() => setSelectedLetter(index)}
+							application={application}
+							selected={selectedApplication === index}
+							onClick={() => setSelectedApplication(index)}
 						/>
 					))}
 				</div>
 				<div style={{ flex: 2 }}>
-					<CoverLetter letter={LETTERS[selectedLetter]} />
+					{applications.length > 0 &&
+						applications[selectedApplication] && (
+							<ApplicationDetails
+								application={applications[selectedApplication]}
+								onChange={() =>
+									setSelectedApplication(
+										selectedApplication - 1,
+									)
+								}
+							/>
+						)}
 				</div>
 			</div>
 		</Layout>
 	)
+}
+
+export async function getServerSideProps() {
+	const applications = await Application.findAll()
+	return {
+		props: {
+			applications: JSON.parse(JSON.stringify(applications)),
+		},
+	}
 }
